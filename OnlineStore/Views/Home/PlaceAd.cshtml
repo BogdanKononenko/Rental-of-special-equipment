@@ -1,0 +1,39 @@
+@using Microsoft.AspNetCore.Mvc.TagHelpers
+@using System.Dynamic
+@model OnlineStore.Models.Equipment 
+
+<h2>Добавление техники</h2>
+<form method="post" asp-action="PlaceAd" asp-controller="home" enctype="multipart/form-data">
+    <p>
+        <label asp-for="Name">Name</label><br/>
+        <input type="text" asp-for="Name" required pattern="[A-Za-zА-Яа-яЁё]{3,}"/>
+    </p>
+    <p>
+        <label asp-for="Id">Price</label><br/>
+        <input type="number" asp-for="Price" required/>
+    </p>
+    <p>
+        <label asp-for="Description">Description</label><br/>
+        <input type="text" asp-for="Description" required/>
+    </p>
+    <p>
+        <label asp-for="NumberPhone">Number Phone</label><br/>
+        <input type="text" asp-for="NumberPhone" class="tel" required/>
+    </p>
+    <p>
+        <label asp-for="DiscountPercentage">Discount Percentage</label><br/>
+        <input type="number" asp-for="DiscountPercentage" required/>
+    </p>
+    <p>
+        <label asp-for="Category">Category</label><br/>
+        <input type="text" asp-for="Category" required/>
+    </p>
+    
+    <p>
+        <input type="file" name="image" required/>
+    </p>
+    <p>
+        <input type="submit" value="Отправить"/>
+    </p>
+</form>
+

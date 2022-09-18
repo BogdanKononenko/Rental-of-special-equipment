@@ -1,0 +1,63 @@
+﻿@model EquipsReviews
+
+<form>
+    
+    <h3>
+        <label>Категория: </label>
+        <select name="category" asp-items="Model.SelectListItem"></select>
+        <input type="submit" value="Фильтр"/>
+        @{
+            string pathImg = "";
+            if (ViewBag.PriceSort == SortState.PriceAsc)
+            {
+                pathImg = "Img/Desc.png";
+            }
+            else
+            {
+                pathImg = "Img/Asc.png";
+            }
+            <a class="m-lg-3" asp-controller="Home" asp-action="Index" asp-route-category="@Model.SelectListItem[0].Text" asp-route-sortState="@ViewBag.PriceSort">По цене <img width="55" height="55" class="img-thumbnail" src="@pathImg"/> </a>
+        }
+    </h3>
+
+</form>
+
+@{
+    foreach (var equip in Model.Equipments)
+    {
+        <container class="container">
+            <row class="row">
+                <div class="col-md-6">
+                    @{
+                        var photoBase64 = $"data:image/jpg;base64,{Convert.ToBase64String(equip.Photo)}";
+                        <img src=@photoBase64 class="w-100"/>
+                    }
+                </div>
+                <div class="col-md-5 display-6">
+                    @if (equip.DiscountPercentage > 0)
+                    {
+                        <div class="bg-danger text-white col-3 ps-lg-2">- @equip.DiscountPercentage%</div>
+                        <p>Цена:
+                            <price class="bg-success text-white col-6 ps-lg-2 mt-1 fw-bold">
+                            @equip.DiscountedPrice()
+                            </price> 
+                            &nbsp<s>@equip.Price</s>  
+                            </p>
+                    }
+                    else
+                    {
+                        <p>Цена: @equip.Price</p>
+                    }
+                    <p>@equip.Name</p>
+                    <p class="fs-2">@equip.Description</p>
+                    <p class="fw-bold font-monospace">@equip.NumberPhone</p>
+                    <p>Категория: @equip.Category</p>
+                    @{ var fitReviews = Model.Reviews.Count(review => review.EquipmentId == equip.Id); }
+                    <a asp-action="CommentsAd" asp-controller="Home" asp-route-id="@equip.Id" class="link-warning">Отзывы @fitReviews</a>
+                </div>
+                <a onclick="handlingRequest('/Home/CheckingForAdmin', '/Home/DeleteEquipment/@equip.Id')" class="col-md-1"><img src="Img/iconDelete.png" width="55" height="55" class="img-thumbnail"/></a>
+            </row>
+        </container>
+    }
+}
+

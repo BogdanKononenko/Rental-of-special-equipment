@@ -1,0 +1,74 @@
+@{
+    Layout = "_Layout";
+}
+@model ReviewsEquipmentModel
+
+<container class="container">
+    <row class="row">
+        <div class="col-md-6">
+            @{
+                var photoBase64 = $"data:image/jpg;base64,{Convert.ToBase64String(Model.NeedEquipment.Photo)}";
+                <img src=@photoBase64 class="w-100"/>
+            }
+        </div>
+        <div class="col-md-6 display-6">
+            @if (Model.NeedEquipment.DiscountPercentage > 0)
+            {
+                <div class="bg-danger text-white col-2 ps-lg-2">- @Model.NeedEquipment.DiscountPercentage%</div>
+            }
+            <p class="bg-success text-white col-2 ps-lg-2 mt-1 fw-bold">@Model.NeedEquipment.Price</p>
+            <p>@Model.NeedEquipment.Name</p>
+            <p class="fs-2">@Model.NeedEquipment.Description</p>
+            <p class="fw-bold font-monospace">@Model.NeedEquipment.NumberPhone</p>
+        </div>
+    </row>
+
+    <form method="post" class="border-danger mt-4 fs-3">
+        <div class="display-6">Оставить отзыв</div>
+        <div class="form-group mt-3 ">
+            <label for="nameText">Имя</label>
+            <input id="nameText" type="text" class="form-control" name="nameText" 
+                   aria-describedby="emailHelp" placeholder="Введите имя" required>
+        </div>
+        <div class="form-group">
+            <label for="reviewsText">Отзыв</label>
+            <input id="reviewsText" type="text" class="form-control" 
+                   name="reviewsText" placeholder="Введите текст"  required>
+        </div>
+        <button id="sendComment" type="submit" class="btn btn-primary mt-3 fs-5">Отправить</button>
+    </form>
+    @{
+        foreach (var review in Model.NeedReviews)
+        {
+            <div class="col-md-12 mt-5">
+                <h3 class="fw-bold">
+                    @review.ReviewersName
+                </h3>
+                <h5>
+                    @review.ReviewString
+                </h5>
+            </div>
+        }
+    }
+
+</container>
+
+<script>
+    document.getElementById("sendComment").addEventListener("click", e => 
+    {
+        e.preventDefault();
+        let name = document.getElementById("nameText").value;
+        let text = document.getElementById("reviewsText").value;
+        if (name == ""){
+            alert("Введите имя");
+        }
+        else if (text == ""){
+            alert("Введите отзыв");
+        }
+        else {
+            let clickUrl = "https://localhost:7198/Home/SendComment?equipmentId=@Model.NeedEquipment.Id&nameText=" + name
+            + "&reviewsText=" + text;
+            handlingRequest("/Home/CheckingForAuthorization", clickUrl);
+        }
+    });
+</script>

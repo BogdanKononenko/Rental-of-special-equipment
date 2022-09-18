@@ -1,0 +1,60 @@
+﻿@using Microsoft.AspNetCore.Mvc.TagHelpers
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="utf-8"/>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+    <title>@ViewData["Title"] - OnlineStore</title>
+    <link rel="stylesheet" href="~/lib/bootstrap/dist/css/bootstrap.min.css"/>
+    <link rel="stylesheet" href="~/css/site.css" asp-append-version="true"/>
+    <link rel="stylesheet" href="~/OnlineStore.styles.css" asp-append-version="true"/>
+</head>
+
+<body style="font-family: 'JetBrains Mono Light'">
+<header>
+    <nav class="navbar navbar-expand-sm navbar-toggleable-sm navbar-light bg-white border-bottom box-shadow mb-3">
+        <div class="container-fluid">
+            <container class="container">
+                <row class="row">
+                    
+                    <div class="col-md-7">
+                        <a asp-action="Index" asp-controller="Home" class="navbar-brand display-1 fs-1" style="color: #0269ec">Аренда спецтехники</a>
+                    </div>
+                    <div class="col-md-3">
+                        <a id="PlaceAd" asp-action="PlaceAd" asp-controller="Home" class="link-success fs-3">Разместить объявление</a>
+                    </div>
+                    <div class="col-md-2">
+                        <a asp-action="Login" asp-controller="Home" class="link-success fs-3">Войти</a>
+                    </div>
+
+                </row>
+            </container>
+        </div>
+    </nav>
+</header>
+<div class="container">
+    <main role="main" class="pb-3">
+        @RenderBody()
+    </main>
+</div>
+
+<footer class="border-top footer text-muted">
+    <div class="container">
+        &copy; 2022 - OnlineStore
+    </div>
+</footer>
+<script src="~/lib/jquery/dist/jquery.min.js"></script>
+<script src="~/lib/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
+<script src="~/js/site.js" asp-append-version="true"></script>
+@await RenderSectionAsync("Scripts", required: false)
+</body>
+</html>
+
+<script>
+    document.getElementById("PlaceAd").addEventListener("click", e =>
+    {
+        e.preventDefault();
+        handlingRequest("/Home/CheckingForAuthorization", "https://localhost:7198/Home/PlaceAd/");
+    });
+</script>
